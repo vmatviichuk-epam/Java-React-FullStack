@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DataInitializationService {
-    
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    
+
     public DataInitializationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    
+
     @PostConstruct
     public void initializeData() {
         // Create default user if no users exist
@@ -28,7 +28,7 @@ public class DataInitializationService {
                     .role("ADMIN")
                     .lastPasswordUpdate(null) // Set to null for legacy user behavior
                     .build();
-            
+
             userRepository.save(defaultUser);
         }
     }

@@ -19,20 +19,20 @@ public class PasswordLogs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long id;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "UserId", referencedColumnName = "Id", nullable = false)
     private User user;
-    
+
     @Column(name = "Action", nullable = false)
     private String action;
-    
+
     @Column(name = "Timestamp", nullable = false)
     private LocalDateTime timestamp;
-    
+
     @Column(name = "IpAddress")
     private String ipAddress;
-    
+
     @PrePersist
     protected void onCreate() {
         timestamp = LocalDateTime.now();

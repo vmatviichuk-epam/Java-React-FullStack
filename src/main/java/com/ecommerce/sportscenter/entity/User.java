@@ -20,28 +20,28 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long id;
-    
+
     @Column(name = "Username", unique = true, nullable = false)
     private String username;
-    
+
     @Column(name = "Password", nullable = false)
     private String password;
-    
+
     @Column(name = "Email")
     private String email;
-    
+
     @Column(name = "LastPasswordUpdate")
     private LocalDateTime lastPasswordUpdate;
-    
+
     @Column(name = "CreatedAt")
     private LocalDateTime createdAt;
-    
+
     @Column(name = "Role")
     private String role;
-    
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PasswordHistory> passwordHistories;
-    
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
