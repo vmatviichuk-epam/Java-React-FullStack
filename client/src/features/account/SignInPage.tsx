@@ -1,8 +1,8 @@
 import { LoadingButton } from "@mui/lab";
-import { Container, CssBaseline, Box, Avatar, Typography, TextField, FormControlLabel, Checkbox, Grid } from "@mui/material";
+import { Container, CssBaseline, Box, Avatar, Typography, TextField, FormControlLabel, Checkbox, Grid, Link as MuiLink } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { store, useAppDispatch } from "../../app/store/configureStore";
+import { useAppDispatch } from "../../app/store/configureStore";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { signInUser } from "./accountSlice";
@@ -19,15 +19,26 @@ export default function SignInPage(){
     async function submitForm(data: FieldValues){
       try{
         //dispatching the sign in action
-        await dispatch(signInUser(data));
-        //check if the user is logged in
-        const {user} = store.getState().account;
-        if(user){
+        const result = await dispatch(signInUser(data));
+        
+        // Check if sign in was successful
+        if (signInUser.fulfilled.match(result)) {
           //navigate it to store page
           navigate(location.state?.from || '/store');
-        }else{
+        } else if (signInUser.rejected.match(result)) {
+          // Check if it's a mandatory password change requirement
+          const payload = result.payload as any;
+          if (payload?.requiresPasswordChange || payload?.error === 'MANDATORY_PASSWORD_CHANGE') {
+            navigate('/change-password', { 
+              state: { 
+                username: data.username, 
+                password: data.password 
+              } 
+            });
+            return;
+          }
           toast.error('Sign in Failed. Please try again');
-        }        
+        }
       }catch(error){
         console.log('Error signing in:', error);
         toast.error('Sign in Failed. Please try again');
@@ -88,14 +99,14 @@ export default function SignInPage(){
               </LoadingButton>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <MuiLink href="#" variant="body2">
                     Forgot password?
-                  </Link>
+                  </MuiLink>
                 </Grid>
                 <Grid item>
-                  <Link href="/register" variant="body2">
+                  <MuiLink component={Link} to="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
-                  </Link>
+                  </MuiLink>
                 </Grid>
               </Grid>
             </Box>

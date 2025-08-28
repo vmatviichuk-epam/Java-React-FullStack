@@ -9,6 +9,7 @@ import ServerError from "../errors/ServerError";
 import BasketPage from "../../features/basket/BasketPage";
 import SignInPage from "../../features/account/SignInPage";
 import RegisterPage from "../../features/account/RegisterPage";
+import MandatoryPasswordChangePage from "../../features/account/MandatoryPasswordChangePage";
 import RequireAuth from "./RequireAuth";
 import CheckoutPage from "../../features/checkout/CheckoutPage";
 import Order from "../../features/orders/Order";
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
             {path:'basket', element:<BasketPage/>},
             {path:'login', element:<SignInPage/>},
             {path:'register', element:<RegisterPage/>},
+            {path:'change-password', element:<MandatoryPasswordChangePage/>},
             {path:'not-found', element:<NotFound/>},
             {path:'server-error', element:<ServerError/>},
             {path:'*', element:<Navigate replace to='/not-found'/>}

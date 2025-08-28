@@ -8,6 +8,18 @@ import { Basket } from "../models/basket";
 
 axios.defaults.baseURL ='http://localhost:8081/api/';
 
+// Request interceptor to add JWT token
+axios.interceptors.request.use(config => {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+        const user = JSON.parse(userString);
+        if (user.token) {
+            config.headers.Authorization = `Bearer ${user.token}`;
+        }
+    }
+    return config;
+});
+
 const idle = () => new Promise(resolve => setTimeout(resolve, 100));
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -118,7 +130,11 @@ const Basket = {
 }
 
 const Account = {
-  login: (values:any) =>requests.post('auth/login', values)
+  login: (values: object) => requests.post('auth/login', values),
+  changePassword: (values: object) => requests.post('auth/change-password', values),
+  mandatoryPasswordChange: (values: object) => requests.post('auth/mandatory-password-change', values),
+  validatePassword: (password: string) => requests.post('auth/validate-password', { password }),
+  getPasswordRequirements: () => requests.get('auth/password-requirements')
 }
 
 const Orders ={

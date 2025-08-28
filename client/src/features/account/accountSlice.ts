@@ -19,9 +19,20 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
     'auth/login',
     async (data, thunkAPI) => {
         try{
-            const user = await agent.Account.login(data);
-            localStorage.setItem('user', JSON.stringify(user));
-            return user;
+            const response = await agent.Account.login(data);
+            
+            // Check if response indicates mandatory password change required
+            if (response.requiresMandatoryChange) {
+                // Don't store user data, redirect to password change
+                return thunkAPI.rejectWithValue({
+                    error: 'MANDATORY_PASSWORD_CHANGE',
+                    requiresPasswordChange: true
+                });
+            }
+            
+            // Normal login - store user data
+            localStorage.setItem('user', JSON.stringify(response));
+            return response;
         }
         catch(error: any){
             return thunkAPI.rejectWithValue({error: error.data})
