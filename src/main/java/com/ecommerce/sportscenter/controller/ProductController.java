@@ -6,6 +6,7 @@ import com.ecommerce.sportscenter.model.TypeResponse;
 import com.ecommerce.sportscenter.service.BrandService;
 import com.ecommerce.sportscenter.service.ProductService;
 import com.ecommerce.sportscenter.service.TypeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
+@Tag(name = "Products", description = "Product management operations")
 public class ProductController {
     private final ProductService productService;
     private final BrandService brandService;

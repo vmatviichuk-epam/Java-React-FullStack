@@ -5,6 +5,7 @@ import com.ecommerce.sportscenter.entity.BasketItem;
 import com.ecommerce.sportscenter.model.BasketItemResponse;
 import com.ecommerce.sportscenter.model.BasketResponse;
 import com.ecommerce.sportscenter.service.BasketService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/baskets")
+@Tag(name = "Baskets", description = "Shopping basket management operations")
 public class BasketController {
     private final BasketService basketService;
 

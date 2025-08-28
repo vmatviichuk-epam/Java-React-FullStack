@@ -10,6 +10,14 @@ import com.ecommerce.sportscenter.repository.UserRepository;
 import com.ecommerce.sportscenter.security.JwtHelper;
 import com.ecommerce.sportscenter.service.PasswordService;
 import com.ecommerce.sportscenter.service.PasswordValidationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Authentication and authorization operations")
 public class AuthController {
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager manager;
@@ -39,6 +48,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "User login", description = "Authenticate user and generate JWT token")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login successful", 
+                     content = @Content(mediaType = "application/json", 
+                                      schema = @Schema(implementation = JwtResponse.class))),
+        @ApiResponse(responseCode = "401", description = "Invalid credentials", 
+                     content = @Content(mediaType = "text/plain"))
+    })
     public ResponseEntity<?> login(@RequestBody JwtRequest request, HttpServletRequest httpRequest){
         try {
             this.authenticate(request.getUsername(), request.getPassword());
@@ -67,6 +84,12 @@ public class AuthController {
     }
 
     @GetMapping("/user")
+    @Operation(summary = "Get user details", description = "Retrieve user details from JWT token")
+    @SecurityRequirement(name = "bearer-jwt")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User details retrieved successfully"),
+        @ApiResponse(responseCode = "401", description = "Invalid or expired token")
+    })
     public ResponseEntity<UserDetails> getUserDetails(@RequestHeader("Authorization") String tokenHeader){
         String token = extractTokenFromHeader(tokenHeader);
         if(token!=null){

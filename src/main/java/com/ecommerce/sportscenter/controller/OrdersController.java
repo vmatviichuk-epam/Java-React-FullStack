@@ -3,6 +3,7 @@ package com.ecommerce.sportscenter.controller;
 import com.ecommerce.sportscenter.model.OrderDto;
 import com.ecommerce.sportscenter.model.OrderResponse;
 import com.ecommerce.sportscenter.service.OrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
+@Tag(name = "Orders", description = "Order management operations")
 public class OrdersController {
     private final OrderService orderService;
 

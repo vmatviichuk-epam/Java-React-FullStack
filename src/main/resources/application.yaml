@@ -23,3 +23,13 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /api/v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
+    groups-order: DESC
+  show-actuator: true
